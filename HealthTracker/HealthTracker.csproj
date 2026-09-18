@@ -68,6 +68,10 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
-	</ItemGroup>
+    <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
+    <!-- Calliope - SQLite for local storage: the standard MAUI choice. Tiny, fast,
+     no server, works offline. Your data lives in one file on the phone. -->
+
+  </ItemGroup>
 
 </Project>
