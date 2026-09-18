@@ -49,7 +49,20 @@
             </Border>
 
             <!-- Meals -->
-            <Label Text="Meals" Style="{StaticResource SubHeadline}" />
+            <!-- Calliope - Grid: the workhorse layout. ColumnDefinitions="*, Auto" means two
+            columns: * = "soak up all leftover space", Auto = "only as wide as the
+            content needs". The * column shoves the button to the far right edge.
+            Grid.Column="1" puts the button in the second column (columns start at 0).
+            ColumnSpacing keeps them from touching. -->
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">
+                <Label Text="Meals" Style="{StaticResource SubHeadline}" VerticalOptions="Center" />
+                <Button
+        Text="+ Log food"
+        Clicked="OnLogFoodClicked"
+        Grid.Column="1"
+        VerticalOptions="Center" />
+            </Grid>
+
             <!-- Calliope - CollectionView: one card per meal, stamped from the DataTemplate.
                  ItemsSource is set from code. EmptyView is the friendly message shown when
                  today has no meals yet. Margin on the Border spaces the rows, since the

@@ -74,4 +74,10 @@
 
   </ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="AddFoodPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

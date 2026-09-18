@@ -106,4 +106,12 @@ public partial class MainPage : ContentPage
         }
         MealsList.ItemsSource = rows;
     }
+
+    // Calliope - Shell navigation: GoToAsync pushes AddFoodPage onto the navigation
+    // stack. The back button appears automatically — you get it for free with Shell.
+    private async void OnLogFoodClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(AddFoodPage));
+    }
+
 }
