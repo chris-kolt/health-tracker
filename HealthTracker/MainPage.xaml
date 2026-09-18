@@ -41,14 +41,10 @@
                 BackgroundColor="{AppThemeBinding Light=#F2F2F2, Dark=#2A2A2A}">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Calories" FontAttributes="Bold" />
-                    <Label Text="1,240 / 1,750" FontSize="28" FontAttributes="Bold" />
-                    <!-- Calliope - PLACEHOLDER DATA, hardcoded for now. When we add the
-                         database, this Label's Text gets data-bound to "today's calories
-                         vs target" instead of a literal string. The seam is intentional. -->
-                    <ProgressBar Progress="0.71" />
-                    <!-- Calliope - Progress runs 0 to 1. 1240 / 1750 ≈ 0.71. Same story
-                         as above: hardcoded now, bound to real data later. -->
-                    <Label Text="510 remaining" FontSize="13" TextColor="Gray" />
+                    <Label x:Name="CaloriesLabel" Text="…" FontSize="28" FontAttributes="Bold" />
+                    <ProgressBar x:Name="CaloriesBar" Progress="0" />
+                    <Label x:Name="RemainingLabel" Text="…" FontSize="13" TextColor="Gray" />
+
                 </VerticalStackLayout>
             </Border>
 
