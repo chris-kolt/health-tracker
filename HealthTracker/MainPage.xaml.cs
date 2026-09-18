@@ -15,7 +15,17 @@ public partial class MainPage : ContentPage
     // parameter and passes the one shared instance in. This is dependency injection
     // paying off: the page never creates a database, it just declares what it needs.
     private readonly HealthDatabase _db;
-    
+
+    // Calliope - Display-only shape for one meal row. The database gives us FoodEntry
+    // + FoodComponent objects; the list wants "a title line and a detail line" per
+    // row. So we translate into these in LoadTodayAsync. This is the seed of an idea
+    // called a "view model": data shaped for the screen rather than for storage.
+    private class MealRow
+    {
+        public string Description { get; set; } = string.Empty;
+        public string Detail { get; set; } = string.Empty;
+    }
+
     // Calliope - The constructor runs once, when the page is created.
     public MainPage(HealthDatabase db)
     {
@@ -78,5 +88,22 @@ public partial class MainPage : ContentPage
         CaloriesLabel.Text = $"{totals.Calories:0} / {goal}";
         RemainingLabel.Text = $"{Math.Max(0, goal - totals.Calories):0} remaining";
         CaloriesBar.Progress = goal > 0 ? Math.Min(1, totals.Calories / goal) : 0;
+
+        // Calliope - Build one MealRow per entry, then hand the list to the CollectionView.
+        // Setting ItemsSource re-renders the list from the DataTemplate. The screen now
+        // follows the database: log a meal, it appears; delete one, it's gone.
+        var entries = await _db.GetFoodEntriesAsync(today);
+        var rows = new List<MealRow>();
+        foreach (var entry in entries)
+        {
+            var components = await _db.GetComponentsAsync(entry.Id);
+            var cals = components.Sum(c => c.Calories ?? 0);
+            rows.Add(new MealRow
+            {
+                Description = entry.Description,
+                Detail = $"{entry.Meal} · {cals:0} cal"
+            });
+        }
+        MealsList.ItemsSource = rows;
     }
 }
