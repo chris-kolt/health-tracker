@@ -7,7 +7,7 @@
     Title="HealthTracker">
 
     <ShellContent
-        Title="Home"
+        Title="Today"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
