@@ -2,9 +2,52 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HealthTracker.AddFoodPage"
-             Title="Log Food">
-    <VerticalStackLayout Padding="20" Spacing="16">
-        <Label Text="Log Food" Style="{StaticResource Headline}" />
-        <Label Text="Log food entries here!" TextColor="Gray" />
-    </VerticalStackLayout>
+             Title="Add Food">
+    <!-- Calliope - ScrollView: the keyboard eats half the screen, so the form scrolls. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Label Text="Add Food" Style="{StaticResource Headline}" />
+
+            <!-- Calliope - Entry = single-line text input. -->
+            <Label Text="What did you eat?" />
+            <Entry x:Name="DescriptionEntry" Placeholder="e.g. Oatmeal with berries" />
+
+            <!-- Calliope - Picker = dropdown; options set from code-behind. -->
+            <Label Text="Meal" />
+            <Picker x:Name="MealPicker" Title="Select a meal" />
+
+            <!-- Calliope - Keyboard="Numeric" brings up the number pad. -->
+            <Label Text="Calories" />
+            <Entry x:Name="CaloriesEntry" Keyboard="Numeric" Placeholder="0" />
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <VerticalStackLayout>
+                    <Label Text="Protein (g)" />
+                    <Entry x:Name="ProteinEntry" Keyboard="Numeric" Placeholder="0" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="Carbs (g)" />
+                    <Entry x:Name="CarbsEntry" Keyboard="Numeric" Placeholder="0" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <VerticalStackLayout>
+                    <Label Text="Fat (g)" />
+                    <Entry x:Name="FatEntry" Keyboard="Numeric" Placeholder="0" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="Fiber (g)" />
+                    <Entry x:Name="FiberEntry" Keyboard="Numeric" Placeholder="0" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Button Text="Save" Clicked="OnSaveClicked" />
+
+            <!-- Calliope - Inline confirmation. Starts invisible; the code-behind
+                 flips it on after each save. -->
+            <Label x:Name="SavedLabel" IsVisible="False" TextColor="Green"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

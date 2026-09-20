@@ -28,9 +28,14 @@ public static class MauiProgram
 		// it will just work. Transient = a fresh page each time it's navigated to.
 		builder.Services.AddTransient<MainPage>();
 
-#if DEBUG
-		builder.Logging.AddDebug();
-#endif
+        // Calliope - AddFoodPage is a tab with a HealthDatabase constructor parameter,
+        // so it needs the same transient registration as MainPage.
+        builder.Services.AddTransient<AddFoodPage>();
+
+
+		#if DEBUG
+			builder.Logging.AddDebug();
+		#endif
 
 		return builder.Build();
 	}

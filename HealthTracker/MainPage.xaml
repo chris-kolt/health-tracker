@@ -54,28 +54,28 @@
                         <VerticalStackLayout Spacing="4">
                             <Label x:Name="ProteinLabel" FontSize="12"
                                    HorizontalOptions="Center" />
-                            <ProgressBar x:Name="ProteinBar" />
+                            <GraphicsView x:Name="ProteinRing" HeightRequest="64" WidthRequest="64" HorizontalOptions="Center" />
                             <Label Text="Protein" FontSize="12"
                                    HorizontalOptions="Center" />
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
                             <Label x:Name="CarbsLabel" FontSize="12"
                                    HorizontalOptions="Center" />
-                            <ProgressBar x:Name="CarbsBar" />
+                            <GraphicsView x:Name="CarbsRing" HeightRequest="64" WidthRequest="64" HorizontalOptions="Center" />
                             <Label Text="Carbs" FontSize="12"
                                    HorizontalOptions="Center" />
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Column="2" Spacing="4">
                             <Label x:Name="FatLabel" FontSize="12"
                                    HorizontalOptions="Center" />
-                            <ProgressBar x:Name="FatBar" />
+                            <GraphicsView x:Name="FatRing" HeightRequest="64" WidthRequest="64" HorizontalOptions="Center" />
                             <Label Text="Fat" FontSize="12"
                                    HorizontalOptions="Center" />
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Column="3" Spacing="4">
                             <Label x:Name="FiberLabel" FontSize="12"
                                    HorizontalOptions="Center" />
-                            <ProgressBar x:Name="FiberBar" />
+                            <GraphicsView x:Name="FiberRing" HeightRequest="64" WidthRequest="64" HorizontalOptions="Center" />
                             <Label Text="Fiber" FontSize="12"
                                    HorizontalOptions="Center" />
                         </VerticalStackLayout>

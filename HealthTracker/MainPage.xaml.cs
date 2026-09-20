@@ -17,7 +17,21 @@ public partial class MainPage : ContentPage
         _db = db;
         // Calliope - "dddd, MMM. d" -> "Sunday, Sep. 20", matching your sketch.
         DateLabel.Text = DateTime.Now.ToString("dddd, MMM. d");
+
+        // Macro Rings
+        ProteinRing.Drawable = _proteinRing;
+        CarbsRing.Drawable = _carbsRing;
+        FatRing.Drawable = _fatRing;
+        FiberRing.Drawable = _fiberRing;
+
     }
+
+    // Calliope - One drawable per ring. They hold the progress value; the
+    // GraphicsView in the XAML is just the frame they paint into.
+    private readonly RingDrawable _proteinRing = new() { FillColor = Colors.DodgerBlue };
+    private readonly RingDrawable _carbsRing = new() { FillColor = Colors.DarkOrange };
+    private readonly RingDrawable _fatRing = new() { FillColor = Colors.Gold };
+    private readonly RingDrawable _fiberRing = new() { FillColor = Colors.SeaGreen };
 
     // Calliope - Runs EVERY time the page appears, so the numbers refresh whenever
     // you switch back to this tab.
@@ -61,19 +75,25 @@ public partial class MainPage : ContentPage
         // repetitive on purpose — clarity beats cleverness while you're learning.
         var proteinGoal = target.ProteinGoalG ?? 0;
         ProteinLabel.Text = $"{totals.ProteinG:0} / {proteinGoal}g";
-        ProteinBar.Progress = proteinGoal > 0 ? Math.Min(1, totals.ProteinG / proteinGoal) : 0;
+        _proteinRing.Progress = proteinGoal > 0 ? Math.Min(1, totals.ProteinG / proteinGoal) : 0;
+        ProteinRing.Invalidate(); // "repaint yourself with the new value"
+
 
         var carbsGoal = target.CarbsGoalG ?? 0;
         CarbsLabel.Text = $"{totals.CarbsG:0} / {carbsGoal}g";
-        CarbsBar.Progress = carbsGoal > 0 ? Math.Min(1, totals.CarbsG / carbsGoal) : 0;
+        _carbsRing.Progress = carbsGoal > 0 ? Math.Min(1, totals.CarbsG / carbsGoal) : 0;
+        ProteinRing.Invalidate(); // "repaint yourself with the new value"
+
 
         var fatGoal = target.FatGoalG ?? 0;
         FatLabel.Text = $"{totals.FatG:0} / {fatGoal}g";
-        FatBar.Progress = fatGoal > 0 ? Math.Min(1, totals.FatG / fatGoal) : 0;
+        _fatRing.Progress = fatGoal > 0 ? Math.Min(1, totals.FatG / fatGoal) : 0;
+        FatRing.Invalidate(); // "repaint yourself with the new value"
 
         var fiberGoal = target.FiberGoalG ?? 0;
         FiberLabel.Text = $"{totals.FiberG:0} / {fiberGoal}g";
-        FiberBar.Progress = fiberGoal > 0 ? Math.Min(1, totals.FiberG / fiberGoal) : 0;
+        _fiberRing.Progress = fiberGoal > 0 ? Math.Min(1, totals.FiberG / fiberGoal) : 0;
+        FiberRing.Invalidate(); // "repaint yourself with the new value"
     }
 
     // Calliope - The expand buttons: for now both jump to the Nutrition tab, where
