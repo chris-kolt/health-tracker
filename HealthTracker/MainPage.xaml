@@ -38,8 +38,7 @@
             </Border>
 
             <!-- Calliope - Macros card. Four equal columns; each column is eaten/goal,
-                 a progress bar, and the name. The bars are stand-ins — your hand-drawn
-                 rings replace them in the next step. -->
+                 a progress ring, and the name. -->
             <Border StrokeShape="RoundRectangle 12" Padding="16">
                 <VerticalStackLayout Spacing="12">
                     <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">

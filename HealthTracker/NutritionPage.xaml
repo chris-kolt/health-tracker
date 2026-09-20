@@ -3,8 +3,96 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HealthTracker.NutritionPage"
              Title="Nutrition">
-    <VerticalStackLayout Padding="20" Spacing="16">
-        <Label Text="Nutrition" Style="{StaticResource Headline}" />
-        <Label Text="View and manage your food entries here!" TextColor="Gray" />
-    </VerticalStackLayout>
+    <!-- Calliope - Grid, not VerticalStackLayout: the entries table takes the "*" row
+         ("all leftover space") so it gets its own scroll area instead of fighting
+         the page for scrolling. -->
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="16">
+
+        <!-- Calliope - Day navigator: the arrows walk _currentDate back and forth. -->
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+            <Button Text="‹" Clicked="OnPrevDayClicked" VerticalOptions="Center" />
+            <Border Grid.Column="1" StrokeShape="RoundRectangle 10" Padding="14,8"
+                    HorizontalOptions="Center" VerticalOptions="Center">
+                <Label x:Name="DateLabel" FontSize="16" />
+            </Border>
+            <Button Text="›" Grid.Column="2" Clicked="OnNextDayClicked" VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Calliope - Tip card. Placeholder for now; TipLabel is the hookup point for
+             the future AI tip ("try a high-protein dinner to meet your goal..."). -->
+        <Border Grid.Row="1" StrokeShape="RoundRectangle 12" Padding="16">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Tip" FontSize="16" FontAttributes="Bold" />
+                <Label x:Name="TipLabel" FontSize="14" TextColor="Gray"
+                       Text="Your daily tip will appear here." />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Calliope - Entries card: header + scrolling list + pinned totals row. All
+             three grids share identical ColumnDefinitions, so the columns line up. -->
+        <Border Grid.Row="2" StrokeShape="RoundRectangle 12" Padding="16">
+            <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="8">
+                <Label Text="Entries" FontSize="20" TextDecorations="Underline" />
+
+                <Grid Grid.Row="1" ColumnDefinitions="2.4*,1.2*,*,*,*,*">
+                    <Label Text="" />
+                    <Label Grid.Column="1" Text="Calories" FontSize="8" TextColor="MediumVioletRed" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="2" Text="Protein" FontSize="8" TextColor="DodgerBlue" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="3" Text="Carbs" FontSize="8" TextColor="DarkOrange" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="4" Text="Fat" FontSize="8" TextColor="Gold" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="5" Text="Fiber" FontSize="8" TextColor="SeaGreen" FontAttributes="Bold" HorizontalOptions="End" />
+                </Grid>
+
+                <CollectionView Grid.Row="2" x:Name="EntriesView">
+                    <!-- Calliope - EmptyView: what the list shows when there's nothing
+                         to show. Free polish, one nested tag. -->
+                    <CollectionView.EmptyView>
+                        <Label Text="Nothing logged this day yet." TextColor="Gray"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="2.4*,1.2*,*,*,*,*" Padding="0,6" HorizontalOptions="FillAndExpand">
+                                <Grid.Triggers>
+                                    <!-- Calliope - Zebra stripe: shade every other row. (A fixed light color;
+                                    if you tackle dark mode later, swap this for an AppThemeBinding.) -->
+                                    <DataTrigger TargetType="Grid"
+                                        Binding="{Binding IsAlternate}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="DarkSlateGray" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+                                <Label Text="{Binding Name}" Margin="{Binding NameMargin}" FontAttributes="{Binding NameFont}" FontSize="13">
+                                    <!-- Calliope - DataTrigger: "when IsIngredient is true, apply these setters."
+                                    Styling stays in the XAML; the data only says what kind of row this is. -->
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                            Binding="{Binding IsIngredient}" Value="True">
+                                            <Setter Property="FontSize" Value="10" />
+                                            <Setter Property="TextColor" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label Grid.Column="1" Text="{Binding Calories}" FontSize="13" HorizontalOptions="End" />
+                                <Label Grid.Column="2" Text="{Binding Protein}" FontSize="13" HorizontalOptions="End" />
+                                <Label Grid.Column="3" Text="{Binding Carbs}" FontSize="13" HorizontalOptions="End" />
+                                <Label Grid.Column="4" Text="{Binding Fat}" FontSize="13" HorizontalOptions="End" />
+                                <Label Grid.Column="5" Text="{Binding Fiber}" FontSize="13" HorizontalOptions="End" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <BoxView Grid.Row="3" HeightRequest="1" Color="LightGray" />
+                <Grid Grid.Row="4" ColumnDefinitions="2.4*,1.2*,*,*,*,*">
+                    <Label Text="Total" FontSize="13" FontAttributes="Bold" />
+                    <Label Grid.Column="1" x:Name="TotalCaloriesLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="2" x:Name="TotalProteinLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="3" x:Name="TotalCarbsLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="4" x:Name="TotalFatLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="5" x:Name="TotalFiberLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
+                </Grid>
+            </Grid>
+        </Border>
+
+    </Grid>
 </ContentPage>

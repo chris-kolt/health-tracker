@@ -32,9 +32,14 @@ public static class MauiProgram
         // so it needs the same transient registration as MainPage.
         builder.Services.AddTransient<AddFoodPage>();
 
+        // Calliope - NutritionPage is a tab with a HealthDatabase constructor parameter,
+        // so it needs the same transient registration as the other pages.
+        builder.Services.AddTransient<NutritionPage>();
 
-		#if DEBUG
-			builder.Logging.AddDebug();
+
+
+#if DEBUG
+        builder.Logging.AddDebug();
 		#endif
 
 		return builder.Build();

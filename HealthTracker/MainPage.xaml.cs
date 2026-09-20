@@ -82,7 +82,7 @@ public partial class MainPage : ContentPage
         var carbsGoal = target.CarbsGoalG ?? 0;
         CarbsLabel.Text = $"{totals.CarbsG:0} / {carbsGoal}g";
         _carbsRing.Progress = carbsGoal > 0 ? Math.Min(1, totals.CarbsG / carbsGoal) : 0;
-        ProteinRing.Invalidate(); // "repaint yourself with the new value"
+        CarbsRing.Invalidate(); // "repaint yourself with the new value"
 
 
         var fatGoal = target.FatGoalG ?? 0;

@@ -24,7 +24,7 @@ public partial class AddFoodPage : ContentPage
         // Calliope - Guard clause: DisplayAlert is MAUI's built-in popup dialog.
         if (string.IsNullOrWhiteSpace(DescriptionEntry.Text))
         {
-            await DisplayAlert("Missing description", "Tell me what you ate first.", "OK");
+            await DisplayAlertAsync("Missing description", "Tell me what you ate first.", "OK");
             return;
         }
 

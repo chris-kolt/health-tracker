@@ -45,7 +45,13 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-	</PropertyGroup>
+
+    <!-- CA1416 disabled: the platform-compatibility analyzer false-positives on core
+     MAUI APIs in this multi-targeted project (e.g. claims Label.Text is iOS-only).
+     Re-enable if targeting iOS/Windows for real. -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+
+  </PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
