@@ -7,9 +7,9 @@
     Title="HealthTracker">
 
     <!-- Calliope - TabBar = the bottom tab strip. Each ShellContent is one tab,
-         in order: Home, Goals, Add Food, Nutrition, Fitness. Title-only for now;
-         real icons are a polish step later. The AddFoodPage route registration
-         in AppShell.xaml.cs is untouched, so the form keeps working. -->
+        in order: Home, Goals, Add Food, Nutrition, Fitness. Title-only for now;
+        real icons are a polish step later. Each tab owns its route, so GoToAsync
+        with a tab's route name switches to that tab. -->
     <TabBar>
         <ShellContent Title="Home"
                       ContentTemplate="{DataTemplate local:MainPage}"
