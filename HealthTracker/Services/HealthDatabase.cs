@@ -160,9 +160,33 @@ public class HealthDatabase
             await _db.UpdateAsync(metric);
     }
 
+    // Calliope - App invariant: a current target ALWAYS exists. Pages call this,
+    // never the nullable getter above, so nobody null-checks or seeds. First
+    // ever call inserts your real starting numbers, editable later in Goals.
+    public async Task<Target> GetOrCreateCurrentTargetAsync(string date)
+    {
+        var target = await GetCurrentTargetAsync(date);
+        if (target != null)
+            return target;
+
+        target = new Target
+        {
+            EffectiveFrom = date,
+            CalorieGoal = 1750,
+            ProteinGoalG = 140,
+            CarbsGoalG = 150,
+            FatGoalG = 65,
+            FiberGoalG = 25,
+            Notes = "Initial targets"
+        };
+        await SaveTargetAsync(target);
+        return target;
+    }
+
+
     // Calliope - "Current target" = the row with the latest EffectiveFrom on or
     // before today. Pulled into C# for the comparison to keep it obvious.
-    public async Task<Target?> GetCurrentTargetAsync(string date)
+    private async Task<Target?> GetCurrentTargetAsync(string date)
     {
         await EnsureInitAsync();
         var all = await _db.Table<Target>()

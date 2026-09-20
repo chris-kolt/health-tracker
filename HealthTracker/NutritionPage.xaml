@@ -32,10 +32,8 @@
              three grids share identical ColumnDefinitions, ColumnSpacing, and number alignment -->
         <Border Grid.Row="2" StrokeShape="RoundRectangle 12" Padding="16">
             <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="8">
-                <Label Text="Entries" FontSize="20" TextDecorations="Underline" />
-
                 <Grid Grid.Row="1" ColumnDefinitions="2.4*,1.2*,*,*,*,*" ColumnSpacing="8" Padding="0,6">
-                    <Label Text="" />
+                    <Label Text="Entries" FontSize="10" FontAttributes="Bold" />
                     <Label Grid.Column="1" Text="Calories" FontSize="8" TextColor="MediumVioletRed" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Grid.Column="2" Text="Protein" FontSize="8" TextColor="DodgerBlue" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Grid.Column="3" Text="Carbs" FontSize="8" TextColor="DarkOrange" FontAttributes="Bold" HorizontalOptions="Center" />

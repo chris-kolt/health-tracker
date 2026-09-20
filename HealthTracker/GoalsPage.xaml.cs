@@ -18,13 +18,13 @@ public partial class GoalsPage : ContentPage
     {
         base.OnAppearing();
         var today = DateTime.Today.ToString("yyyy-MM-dd");
-        var target = await _db.GetCurrentTargetAsync(today);
+        var target = await _db.GetOrCreateCurrentTargetAsync(today);
 
-        CaloriesEntry.Text = (target?.CalorieGoal ?? 0).ToString();
-        ProteinEntry.Text = (target?.ProteinGoalG ?? 0).ToString();
-        CarbsEntry.Text = (target?.CarbsGoalG ?? 0).ToString();
-        FatEntry.Text = (target?.FatGoalG ?? 0).ToString();
-        FiberEntry.Text = (target?.FiberGoalG ?? 0).ToString();
+        CaloriesEntry.Text = (target.CalorieGoal ?? 0).ToString();
+        ProteinEntry.Text = (target.ProteinGoalG ?? 0).ToString();
+        CarbsEntry.Text = (target.CarbsGoalG ?? 0).ToString();
+        FatEntry.Text = (target.FatGoalG ?? 0).ToString();
+        FiberEntry.Text = (target.FiberGoalG ?? 0).ToString();
         SavedLabel.IsVisible = false;
     }
 
@@ -45,11 +45,11 @@ public partial class GoalsPage : ContentPage
         }
 
         var today = DateTime.Today.ToString("yyyy-MM-dd");
-        var target = await _db.GetCurrentTargetAsync(today);
+        var target = await _db.GetOrCreateCurrentTargetAsync(today);
 
         // Calliope - History-safe: reuse today's row if there is one,
         // otherwise start a new row effective today.
-        if (target == null || target.EffectiveFrom != today)
+        if (target.EffectiveFrom != today)
             target = new Target { EffectiveFrom = today };
 
         target.CalorieGoal = calories;

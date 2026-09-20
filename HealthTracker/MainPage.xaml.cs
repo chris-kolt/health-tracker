@@ -45,24 +45,8 @@ public partial class MainPage : ContentPage
     {
         var today = DateTime.Now.ToString("yyyy-MM-dd");
 
-        // Calliope - Seed your real targets on first launch, so the screen shows
-        // truth instead of zeros. Runs once ever.
-        var target = await _db.GetCurrentTargetAsync(today);
-        if (target == null)
-        {
-            target = new Target
-            {
-                EffectiveFrom = "2026-09-16",
-                CalorieGoal = 1750,
-                ProteinGoalG = 140,
-                CarbsGoalG = 150,
-                FatGoalG = 65,
-                FiberGoalG = 25,
-                Notes = "Initial targets"
-            };
-            await _db.SaveTargetAsync(target);
-        }
-
+        // Christian - Get targets and totals from the database
+        var target = await _db.GetOrCreateCurrentTargetAsync(today);
         var totals = await _db.GetDailyTotalsAsync(today);
 
         // Calliope - Calories card: eaten / goal, remaining, and the bar.
