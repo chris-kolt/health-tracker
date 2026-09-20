@@ -29,67 +29,68 @@
         </Border>
 
         <!-- Calliope - Entries card: header + scrolling list + pinned totals row. All
-             three grids share identical ColumnDefinitions, so the columns line up. -->
+             three grids share identical ColumnDefinitions, ColumnSpacing, and number alignment -->
         <Border Grid.Row="2" StrokeShape="RoundRectangle 12" Padding="16">
             <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="8">
                 <Label Text="Entries" FontSize="20" TextDecorations="Underline" />
 
-                <Grid Grid.Row="1" ColumnDefinitions="2.4*,1.2*,*,*,*,*">
+                <Grid Grid.Row="1" ColumnDefinitions="2.4*,1.2*,*,*,*,*" ColumnSpacing="8" Padding="0,6">
                     <Label Text="" />
-                    <Label Grid.Column="1" Text="Calories" FontSize="8" TextColor="MediumVioletRed" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="2" Text="Protein" FontSize="8" TextColor="DodgerBlue" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="3" Text="Carbs" FontSize="8" TextColor="DarkOrange" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="4" Text="Fat" FontSize="8" TextColor="Gold" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="5" Text="Fiber" FontSize="8" TextColor="SeaGreen" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="1" Text="Calories" FontSize="8" TextColor="MediumVioletRed" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" Text="Protein" FontSize="8" TextColor="DodgerBlue" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" Text="Carbs" FontSize="8" TextColor="DarkOrange" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="4" Text="Fat" FontSize="8" TextColor="Gold" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="5" Text="Fiber" FontSize="8" TextColor="SeaGreen" FontAttributes="Bold" HorizontalOptions="Center" />
                 </Grid>
 
-                <CollectionView Grid.Row="2" x:Name="EntriesView">
-                    <!-- Calliope - EmptyView: what the list shows when there's nothing
-                         to show. Free polish, one nested tag. -->
-                    <CollectionView.EmptyView>
-                        <Label Text="Nothing logged this day yet." TextColor="Gray"
-                               HorizontalOptions="Center" VerticalOptions="Center" />
-                    </CollectionView.EmptyView>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="2.4*,1.2*,*,*,*,*" Padding="0,6" HorizontalOptions="FillAndExpand">
-                                <Grid.Triggers>
-                                    <!-- Calliope - Zebra stripe: shade every other row. (A fixed light color;
-                                    if you tackle dark mode later, swap this for an AppThemeBinding.) -->
-                                    <DataTrigger TargetType="Grid"
-                                        Binding="{Binding IsAlternate}" Value="True">
-                                        <Setter Property="BackgroundColor" Value="DarkSlateGray" />
-                                    </DataTrigger>
-                                </Grid.Triggers>
-                                <Label Text="{Binding Name}" Margin="{Binding NameMargin}" FontAttributes="{Binding NameFont}" FontSize="13">
-                                    <!-- Calliope - DataTrigger: "when IsIngredient is true, apply these setters."
-                                    Styling stays in the XAML; the data only says what kind of row this is. -->
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label"
-                                            Binding="{Binding IsIngredient}" Value="True">
-                                            <Setter Property="FontSize" Value="10" />
-                                            <Setter Property="TextColor" Value="LightGray" />
+                <ScrollView Grid.Row="2">
+                    <!-- Calliope - BindableLayout turns this ordinary stack into a list: one copy
+                    of ItemTemplate per item. Unlike CollectionView (whose item host measures
+                    rows with no width constraint, collapsing star columns), children here
+                    follow normal layout rules, so rows fill the width and zebra stripes span
+                    edge to edge. Simpler tool for a short list. -->
+                    <VerticalStackLayout x:Name="RowsLayout" Spacing="0">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="2.4*,1.2*,*,*,*,*" ColumnSpacing="8" Padding="0,6">
+                                    <Grid.Triggers>
+                                        <DataTrigger TargetType="Grid"
+                                     Binding="{Binding IsAlternate}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="DarkSlateGray" />
                                         </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>
-                                <Label Grid.Column="1" Text="{Binding Calories}" FontSize="13" HorizontalOptions="End" />
-                                <Label Grid.Column="2" Text="{Binding Protein}" FontSize="13" HorizontalOptions="End" />
-                                <Label Grid.Column="3" Text="{Binding Carbs}" FontSize="13" HorizontalOptions="End" />
-                                <Label Grid.Column="4" Text="{Binding Fat}" FontSize="13" HorizontalOptions="End" />
-                                <Label Grid.Column="5" Text="{Binding Fiber}" FontSize="13" HorizontalOptions="End" />
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                    </Grid.Triggers>
+                                    <Label Text="{Binding Name}" Margin="{Binding NameMargin}" FontAttributes="{Binding NameFont}" FontSize="13">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding IsIngredient}" Value="True">
+                                                <Setter Property="FontSize" Value="11" />
+                                                <Setter Property="TextColor" Value="Gray" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label Grid.Column="1" Text="{Binding Calories}" FontSize="13" HorizontalOptions="Center" />
+                                    <Label Grid.Column="2" Text="{Binding Protein}" FontSize="13" HorizontalOptions="Center" />
+                                    <Label Grid.Column="3" Text="{Binding Carbs}" FontSize="13" HorizontalOptions="Center" />
+                                    <Label Grid.Column="4" Text="{Binding Fat}" FontSize="13" HorizontalOptions="Center" />
+                                    <Label Grid.Column="5" Text="{Binding Fiber}" FontSize="13" HorizontalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                        <BindableLayout.EmptyView>
+                            <Label Text="Nothing logged this day yet." TextColor="Gray"
+                   HorizontalOptions="Center" Margin="0,24,0,0" />
+                        </BindableLayout.EmptyView>
+                    </VerticalStackLayout>
+                </ScrollView>
 
                 <BoxView Grid.Row="3" HeightRequest="1" Color="LightGray" />
-                <Grid Grid.Row="4" ColumnDefinitions="2.4*,1.2*,*,*,*,*">
+                <Grid Grid.Row="4" ColumnDefinitions="2.4*,1.2*,*,*,*,*" ColumnSpacing="8" Padding="0,6">
                     <Label Text="Total" FontSize="13" FontAttributes="Bold" />
-                    <Label Grid.Column="1" x:Name="TotalCaloriesLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="2" x:Name="TotalProteinLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="3" x:Name="TotalCarbsLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="4" x:Name="TotalFatLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
-                    <Label Grid.Column="5" x:Name="TotalFiberLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="End" />
+                    <Label Grid.Column="1" x:Name="TotalCaloriesLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" x:Name="TotalProteinLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" x:Name="TotalCarbsLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="4" x:Name="TotalFatLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Grid.Column="5" x:Name="TotalFiberLabel" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" />
                 </Grid>
             </Grid>
         </Border>

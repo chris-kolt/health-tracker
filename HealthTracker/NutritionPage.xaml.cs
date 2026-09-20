@@ -80,7 +80,9 @@ public partial class NutritionPage : ContentPage
                 });
             }
         }
-        EntriesView.ItemsSource = rows;
+        // Calliope - was EntriesView.ItemsSource; BindableLayout feeds a plain layout.
+        BindableLayout.SetItemsSource(RowsLayout, rows);
+
 
         // Calliope - Pinned totals row: the day's sums, always visible under the list.
         var totals = await _db.GetDailyTotalsAsync(dateStr);
