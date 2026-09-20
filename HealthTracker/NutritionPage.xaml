@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HealthTracker.AddFoodPage"
-             Title="Log Food">
+             x:Class="HealthTracker.NutritionPage"
+             Title="Nutrition">
     <VerticalStackLayout Padding="20" Spacing="16">
-        <Label Text="Log Food" Style="{StaticResource Headline}" />
-        <Label Text="Log food entries here!" TextColor="Gray" />
+        <Label Text="Nutrition" Style="{StaticResource Headline}" />
+        <Label Text="View and manage your food entries here!" TextColor="Gray" />
     </VerticalStackLayout>
 </ContentPage>

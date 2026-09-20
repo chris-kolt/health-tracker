@@ -6,9 +6,26 @@
     xmlns:local="clr-namespace:HealthTracker"
     Title="HealthTracker">
 
-    <ShellContent
-        Title="Today"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- Calliope - TabBar = the bottom tab strip. Each ShellContent is one tab,
+         in order: Home, Goals, Add Food, Nutrition, Fitness. Title-only for now;
+         real icons are a polish step later. The AddFoodPage route registration
+         in AppShell.xaml.cs is untouched, so the form keeps working. -->
+    <TabBar>
+        <ShellContent Title="Home"
+                      ContentTemplate="{DataTemplate local:MainPage}"
+                      Route="MainPage" />
+        <ShellContent Title="Goals"
+                      ContentTemplate="{DataTemplate local:GoalsPage}"
+                      Route="GoalsPage" />
+        <ShellContent Title="Add Food"
+                      ContentTemplate="{DataTemplate local:AddFoodPage}"
+                      Route="AddFoodPage" />
+        <ShellContent Title="Nutrition"
+                      ContentTemplate="{DataTemplate local:NutritionPage}"
+                      Route="NutritionPage" />
+        <ShellContent Title="Fitness"
+                      ContentTemplate="{DataTemplate local:FitnessPage}"
+                      Route="FitnessPage" />
+    </TabBar>
 
 </Shell>
