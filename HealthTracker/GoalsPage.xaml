@@ -5,6 +5,32 @@
              Title="Goals">
     <VerticalStackLayout Padding="20" Spacing="16">
         <Label Text="Goals" Style="{StaticResource Headline}" />
-        <Label Text="View and manage your goals here!" TextColor="Gray" />
+        <!-- Calliope - Debugging tool: edit today's target numbers. -->
+        <Label Text="Daily nutrition targets. Changes apply from today."
+               TextColor="Gray" FontSize="13" />
+
+        <Grid ColumnDefinitions="*,120"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+              ColumnSpacing="12" RowSpacing="12">
+            <Label Text="Calories" VerticalOptions="Center" />
+            <Entry Grid.Column="1" x:Name="CaloriesEntry" Keyboard="Numeric" />
+
+            <Label Grid.Row="1" Text="Protein (g)" VerticalOptions="Center" />
+            <Entry Grid.Row="1" Grid.Column="1" x:Name="ProteinEntry" Keyboard="Numeric" />
+
+            <Label Grid.Row="2" Text="Carbs (g)" VerticalOptions="Center" />
+            <Entry Grid.Row="2" Grid.Column="1" x:Name="CarbsEntry" Keyboard="Numeric" />
+
+            <Label Grid.Row="3" Text="Fat (g)" VerticalOptions="Center" />
+            <Entry Grid.Row="3" Grid.Column="1" x:Name="FatEntry" Keyboard="Numeric" />
+
+            <Label Grid.Row="4" Text="Fiber (g)" VerticalOptions="Center" />
+            <Entry Grid.Row="4" Grid.Column="1" x:Name="FiberEntry" Keyboard="Numeric" />
+        </Grid>
+
+        <Button Text="Save goals" Clicked="OnSaveClicked" />
+
+        <!-- Calliope - Inline confirmation, same pattern as Add Food. -->
+        <Label x:Name="SavedLabel" IsVisible="False" />
     </VerticalStackLayout>
 </ContentPage>

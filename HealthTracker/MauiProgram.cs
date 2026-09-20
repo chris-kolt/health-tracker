@@ -36,6 +36,9 @@ public static class MauiProgram
         // so it needs the same transient registration as the other pages.
         builder.Services.AddTransient<NutritionPage>();
 
+        builder.Services.AddTransient<GoalsPage>();
+
+
 
 
 #if DEBUG
