@@ -1,110 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!-- Calliope - Every XAML page opens with this header. The xmlns lines are namespace
-     declarations: the first means "the MAUI controls" (Label, Button, Border...), the
-     x: one means "the XAML language itself" (x:Name, x:Class). Copy them verbatim onto
-     every new page; you never edit them. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HealthTracker.MainPage">
-    <!-- Calliope - x:Class is the handshake: "this layout belongs to the MainPage class
-         in MainPage.xaml.cs". The two files compile into ONE class. -->
+             x:Class="HealthTracker.MainPage"
+             Title="Home">
 
-    <!-- Calliope - ScrollView: if the content is taller than the screen, the user can
-         scroll. On a phone, wrap nearly every page in one. -->
+    <!-- Calliope - ScrollView: the cards must fit small phones, so the page scrolls. -->
     <ScrollView>
-        <!-- Calliope - VerticalStackLayout stacks children top-to-bottom, like Unity's
-             Vertical Layout Group. Padding = space inside the container's edges,
-             Spacing = gaps between the children. -->
-        <VerticalStackLayout
-            Padding="20"
-            Spacing="16">
+        <VerticalStackLayout Padding="20" Spacing="16">
 
-            <!-- Header -->
-            <Label
-                Text="Today"
-                Style="{StaticResource Headline}" />
-            <!-- Calliope - Style pulls a shared definition from App.xaml (the theme).
-                 Change it there once and every page updates. Never hand-style each label. -->
-            <Label
-                x:Name="DateLabel"
-                Style="{StaticResource SubHeadline}" />
-            <!-- Calliope - x:Name exposes this label to the code-behind as a variable
-                 called DateLabel. MainPage.xaml.cs sets its text to today's date below. -->
+            <!-- Calliope - Date chip: a Border draws the rounded box, the Label holds
+                 the date. HorizontalOptions="Center" shrinks the box to the text. -->
+            <Border StrokeShape="RoundRectangle 10"
+                    Padding="14,8"
+                    HorizontalOptions="Center">
+                <Label x:Name="DateLabel" FontSize="16" />
+            </Border>
 
-            <!-- Calories card -->
-            <!-- Calliope - Border is MAUI's "card" container. StrokeShape rounds the
-                 corners. BackgroundColor uses AppThemeBinding so the card looks right
-                 in both light and dark mode, following your phone's theme. -->
-            <Border
-                StrokeShape="RoundRectangle 12"
-                Padding="16"
-                BackgroundColor="{AppThemeBinding Light=#F2F2F2, Dark=#2A2A2A}">
+            <!-- Calliope - Calories card. Border = the card outline; inside, a header
+                 row (title + expand button, the Grid pattern you already know) and
+                 the big numbers. -->
+            <Border StrokeShape="RoundRectangle 12" Padding="16">
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="Calories" FontAttributes="Bold" />
-                    <Label x:Name="CaloriesLabel" Text="…" FontSize="28" FontAttributes="Bold" />
-                    <ProgressBar x:Name="CaloriesBar" Progress="0" />
-                    <Label x:Name="RemainingLabel" Text="…" FontSize="13" TextColor="Gray" />
-
+                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">
+                        <Label Text="Calories" FontSize="20"
+                               TextDecorations="Underline"
+                               VerticalOptions="Center" />
+                        <Button Text="›" Grid.Column="1"
+                                Clicked="OnShowDetailsClicked"
+                                VerticalOptions="Center" />
+                    </Grid>
+                    <Label x:Name="CaloriesLabel" FontSize="34"
+                           HorizontalOptions="Center" />
+                    <Label x:Name="RemainingLabel" FontSize="14" TextColor="Gray"
+                           HorizontalOptions="Center" />
+                    <ProgressBar x:Name="CaloriesBar" />
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Meals -->
-            <!-- Calliope - Grid: the workhorse layout. ColumnDefinitions="*, Auto" means two
-            columns: * = "soak up all leftover space", Auto = "only as wide as the
-            content needs". The * column shoves the button to the far right edge.
-            Grid.Column="1" puts the button in the second column (columns start at 0).
-            ColumnSpacing keeps them from touching. -->
-            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">
-                <Label Text="Meals" Style="{StaticResource SubHeadline}" VerticalOptions="Center" />
-                <Button
-        Text="+ Log food"
-        Clicked="OnLogFoodClicked"
-        Grid.Column="1"
-        VerticalOptions="Center" />
-            </Grid>
-
-            <!-- Calliope - CollectionView: one card per meal, stamped from the DataTemplate.
-                 ItemsSource is set from code. EmptyView is the friendly message shown when
-                 today has no meals yet. Margin on the Border spaces the rows, since the
-                 template doesn't inherit the page's Spacing. -->
-            <CollectionView x:Name="MealsList" EmptyView="No meals logged yet today.">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                        StrokeShape="RoundRectangle 12"
-                        Padding="14"
-                        Margin="0,0,0,10"
-                        BackgroundColor="{AppThemeBinding Light=#F2F2F2, Dark=#2A2A2A}">
-                            <VerticalStackLayout>
-                                <Label Text="{Binding Description}" FontAttributes="Bold" />
-                                <Label Text="{Binding Detail}" FontSize="13" TextColor="Gray" />
-                            </VerticalStackLayout>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <!-- Workout -->
-            <Label Text="Workout" Style="{StaticResource SubHeadline}" />
-            <Border
-                StrokeShape="RoundRectangle 12"
-                Padding="14"
-                BackgroundColor="{AppThemeBinding Light=#F2F2F2, Dark=#2A2A2A}">
-                <!-- Calliope - HorizontalStackLayout is the sideways version: children
-                     left-to-right. Used here to put the checkbox next to its label. -->
-                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
-                    <CheckBox
-                        x:Name="WorkoutCheckBox"
-                        CheckedChanged="OnWorkoutChecked"
-                        VerticalOptions="Center" />
-                    <!-- Calliope - CheckedChanged="OnWorkoutChecked" wires the toggle event
-                         to a method in MainPage.xaml.cs — the same idea as the sample's
-                         Clicked="OnCounterClicked". The handler flips the label text. -->
-                    <Label
-                        x:Name="WorkoutLabel"
-                        Text="Daily routine — done!"
-                        VerticalOptions="Center" />
-                </HorizontalStackLayout>
+            <!-- Calliope - Macros card. Four equal columns; each column is eaten/goal,
+                 a progress bar, and the name. The bars are stand-ins — your hand-drawn
+                 rings replace them in the next step. -->
+            <Border StrokeShape="RoundRectangle 12" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">
+                        <Label Text="Macros" FontSize="20"
+                               TextDecorations="Underline"
+                               VerticalOptions="Center" />
+                        <Button Text="›" Grid.Column="1"
+                                Clicked="OnShowDetailsClicked"
+                                VerticalOptions="Center" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="ProteinLabel" FontSize="12"
+                                   HorizontalOptions="Center" />
+                            <ProgressBar x:Name="ProteinBar" />
+                            <Label Text="Protein" FontSize="12"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label x:Name="CarbsLabel" FontSize="12"
+                                   HorizontalOptions="Center" />
+                            <ProgressBar x:Name="CarbsBar" />
+                            <Label Text="Carbs" FontSize="12"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" Spacing="4">
+                            <Label x:Name="FatLabel" FontSize="12"
+                                   HorizontalOptions="Center" />
+                            <ProgressBar x:Name="FatBar" />
+                            <Label Text="Fat" FontSize="12"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="3" Spacing="4">
+                            <Label x:Name="FiberLabel" FontSize="12"
+                                   HorizontalOptions="Center" />
+                            <ProgressBar x:Name="FiberBar" />
+                            <Label Text="Fiber" FontSize="12"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
             </Border>
 
         </VerticalStackLayout>

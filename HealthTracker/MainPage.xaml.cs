@@ -4,51 +4,23 @@ using HealthTracker.Services;
 // Calliope - File-scoped namespace: everything below lives in "HealthTracker".
 namespace HealthTracker;
 
-// Calliope - "partial" is the load-bearing keyword. This class is completed by
-// generated code from MainPage.xaml (that's the x:Class handshake). The XAML
-// declares the controls; this file declares the behavior; together ONE class.
+// Calliope - "partial": completed by generated code from MainPage.xaml (the x:Class
+// handshake). XAML declares the controls; this file declares the behavior.
 public partial class MainPage : ContentPage
 {
-    
-    // Calliope - The shared database, handed to us by MAUI. Because we registered
-    // HealthDatabase as a singleton in MauiProgram, MAUI sees this constructor
-    // parameter and passes the one shared instance in. This is dependency injection
-    // paying off: the page never creates a database, it just declares what it needs.
+    // Calliope - The shared database, handed over by MAUI (dependency injection).
     private readonly HealthDatabase _db;
 
-    // Calliope - Display-only shape for one meal row. The database gives us FoodEntry
-    // + FoodComponent objects; the list wants "a title line and a detail line" per
-    // row. So we translate into these in LoadTodayAsync. This is the seed of an idea
-    // called a "view model": data shaped for the screen rather than for storage.
-    private class MealRow
-    {
-        public string Description { get; set; } = string.Empty;
-        public string Detail { get; set; } = string.Empty;
-    }
-
-    // Calliope - The constructor runs once, when the page is created.
     public MainPage(HealthDatabase db)
     {
         InitializeComponent();
         _db = db;
-        DateLabel.Text = DateTime.Now.ToString("dddd, MMMM d");
+        // Calliope - "dddd, MMM. d" -> "Sunday, Sep. 20", matching your sketch.
+        DateLabel.Text = DateTime.Now.ToString("dddd, MMM. d");
     }
 
-    // Calliope - Event handler: runs every time the checkbox is toggled.
-    // 'sender' is the CheckBox itself; e.Value is the new state (true/false).
-    private void OnWorkoutChecked(object sender, CheckedChangedEventArgs e)
-    {
-        // Calliope - Ternary operator: condition ? value-if-true : value-if-false.
-        // Compact if/else. Reads as: "checked? show done : show not-done".
-        WorkoutLabel.Text = e.Value
-            ? "Daily routine — done!"
-            : "Daily routine — not done yet";
-    }
-
-    // Calliope - OnAppearing runs EVERY time this page shows on screen (including
-    // coming back to it later). The constructor runs once. Data loading goes here
-    // so the numbers refresh on every visit. (async void is normally a smell, but
-    // for event-style overrides like this one it's the accepted pattern.)
+    // Calliope - Runs EVERY time the page appears, so the numbers refresh whenever
+    // you switch back to this tab.
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -57,12 +29,10 @@ public partial class MainPage : ContentPage
 
     private async Task LoadTodayAsync()
     {
-        // Calliope - "yyyy-MM-dd": the database's date shape, matching your log.
         var today = DateTime.Now.ToString("yyyy-MM-dd");
 
         // Calliope - Seed your real targets on first launch, so the screen shows
-        // truth instead of zeros. Runs once ever — after that a target exists and
-        // this block is skipped.
+        // truth instead of zeros. Runs once ever.
         var target = await _db.GetCurrentTargetAsync(today);
         if (target == null)
         {
@@ -81,38 +51,35 @@ public partial class MainPage : ContentPage
 
         var totals = await _db.GetDailyTotalsAsync(today);
 
-        // Calliope - ?? 0 means "if the goal is missing, treat it as 0" (never crash
-        // on a null). Math.Min/Max keep the bar and the "remaining" text sane when
-        // someone eats over target.
-        var goal = target.CalorieGoal ?? 0;
-        CaloriesLabel.Text = $"{totals.Calories:0} / {goal}";
-        RemainingLabel.Text = $"{Math.Max(0, goal - totals.Calories):0} remaining";
-        CaloriesBar.Progress = goal > 0 ? Math.Min(1, totals.Calories / goal) : 0;
+        // Calliope - Calories card: eaten / goal, remaining, and the bar.
+        var calorieGoal = target.CalorieGoal ?? 0;
+        CaloriesLabel.Text = $"{totals.Calories:0} / {calorieGoal}";
+        RemainingLabel.Text = $"{Math.Max(0, calorieGoal - totals.Calories):0} remaining";
+        CaloriesBar.Progress = calorieGoal > 0 ? Math.Min(1, totals.Calories / calorieGoal) : 0;
 
-        // Calliope - Build one MealRow per entry, then hand the list to the CollectionView.
-        // Setting ItemsSource re-renders the list from the DataTemplate. The screen now
-        // follows the database: log a meal, it appears; delete one, it's gone.
-        var entries = await _db.GetFoodEntriesAsync(today);
-        var rows = new List<MealRow>();
-        foreach (var entry in entries)
-        {
-            var components = await _db.GetComponentsAsync(entry.Id);
-            var cals = components.Sum(c => c.Calories ?? 0);
-            rows.Add(new MealRow
-            {
-                Description = entry.Description,
-                Detail = $"{entry.Meal} · {cals:0} cal"
-            });
-        }
-        MealsList.ItemsSource = rows;
+        // Calliope - Macros card: the same eaten-vs-goal pattern four times. A touch
+        // repetitive on purpose — clarity beats cleverness while you're learning.
+        var proteinGoal = target.ProteinGoalG ?? 0;
+        ProteinLabel.Text = $"{totals.ProteinG:0} / {proteinGoal}g";
+        ProteinBar.Progress = proteinGoal > 0 ? Math.Min(1, totals.ProteinG / proteinGoal) : 0;
+
+        var carbsGoal = target.CarbsGoalG ?? 0;
+        CarbsLabel.Text = $"{totals.CarbsG:0} / {carbsGoal}g";
+        CarbsBar.Progress = carbsGoal > 0 ? Math.Min(1, totals.CarbsG / carbsGoal) : 0;
+
+        var fatGoal = target.FatGoalG ?? 0;
+        FatLabel.Text = $"{totals.FatG:0} / {fatGoal}g";
+        FatBar.Progress = fatGoal > 0 ? Math.Min(1, totals.FatG / fatGoal) : 0;
+
+        var fiberGoal = target.FiberGoalG ?? 0;
+        FiberLabel.Text = $"{totals.FiberG:0} / {fiberGoal}g";
+        FiberBar.Progress = fiberGoal > 0 ? Math.Min(1, totals.FiberG / fiberGoal) : 0;
     }
 
-    // Calliope - AddFoodPage is a tab now, so GoToAsync with its route name
-    // switches to the Add Food tab instead of pushing a new page. No back
-    // button — the tab bar is the way back.
-    private async void OnLogFoodClicked(object sender, EventArgs e)
+    // Calliope - The expand buttons: for now both jump to the Nutrition tab, where
+    // the meals behind these numbers will live. Dedicated detail pages come later.
+    private async void OnShowDetailsClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(AddFoodPage));
+        await Shell.Current.GoToAsync("//NutritionPage");
     }
-
 }
